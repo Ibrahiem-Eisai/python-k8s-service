@@ -3,7 +3,6 @@ Tester service for identifying if env is blue or green.
 """
 import os
 import boto3
-import json
 from dotenv import load_dotenv
 from flask import Flask
 
@@ -18,7 +17,7 @@ from flask import Flask
 # green load balancer -> green target groups
 # main load balancer -> either blue or green target groups
 # at cut over, check if green or blue, then cutover
-# rollback to blue/green if required 
+# rollback to blue/green if required
 
 load_dotenv()
 
@@ -62,8 +61,9 @@ def get_host_names(name):
 def blue_or_green():
     """
     This function returns if the service is running on blue or green cluster env.
-    """ 
-    return "This service is running on pod: "+pod_name+" on node: "+node_name 
+    """
+    get_host_names(node_name)
+    return "This service is running on pod: "+pod_name+" on node: "+node_name
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 80))
