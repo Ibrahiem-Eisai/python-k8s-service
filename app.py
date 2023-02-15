@@ -44,8 +44,7 @@ def get_cluster_name(host_name):
     tags = response['Reservations'][0]['Instances'][0]['Tags']
     for tag in tags:
         if tag['Key'] == "eks:cluster-name":
-            return tag['Value']
-    
+            return tag['Value']  
     return ''
 
 
@@ -55,7 +54,7 @@ def blue_or_green():
     This function returns if the service is running on blue or green cluster env.
     """
     cluster_name = get_cluster_name(node_name)
-    return "This service is running on pod: "+pod_name+" on node: "+node_name+" in the cluster: "+cluster_name
+    return "Serving on pod: "+pod_name+" on node: "+node_name+" in the cluster: "+cluster_name
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 80))
