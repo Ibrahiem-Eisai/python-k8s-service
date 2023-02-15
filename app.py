@@ -3,11 +3,12 @@ from flask import Flask
 
 app = Flask(__name__)
 
-"""
-This function returns if the service is running on blue or green cluster env.
-"""
+
 @app.route("/")
 def blue_or_green():
+    """
+    This function returns if the service is running on blue or green cluster env.
+    """
     return "You are being routed to tweag-dev-blue-cluster"
 
 if __name__ == "__main__":
