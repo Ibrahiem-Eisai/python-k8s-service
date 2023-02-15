@@ -44,7 +44,7 @@ def get_cluster_name(host_name):
     tags = response['Reservations'][0]['Instances'][0]['Tags']
     for tag in tags:
         if tag['Key'] == "eks:cluster-name":
-            return tag['Value']  
+            return tag['Value']
     return ''
 
 
