@@ -6,12 +6,6 @@ import boto3
 from dotenv import load_dotenv
 from flask import Flask
 
-#TODO
-# 1) use boto3 to get node name based on eks tags
-# 2) match the node name to the node name received from Kubernetes Downward API
-# 3) if it matches the green cluster, then we are on green
-# 4) if it matches the blue cluster, then we are on blue
-
 # Cutover strategy
 # blue load balancer -> blue target groups
 # green load balancer -> green target groups
@@ -32,38 +26,35 @@ ec2 = boto3.client('ec2',
     region_name='us-east-1'
 )
 
-def get_host_names(name):
+def get_cluster_name(host_name):
     """
-    Get all host names that are part of an eks cluster
+    Given the node host, retrieve the name of the cluster the pod is running on.
     """
     response = ec2.describe_instances(
         Filters=[
             {
-                'Name':'tag-key',
+                'Name':'private-dns-name',
                 'Values': [
-                    'eks:cluster-name'
+                    host_name
                 ]
             }
         ]
     )
-
-    reservations = response['Reservations']
-    print(reservations)
-    for reservation in reservations:
-        instances = reservation['Instances']
-        for instance in instances:
-            network_interfaces = instance['NetworkInterfaces']
-            for network_interface in network_interfaces:
-                host_names = network_interface['PrivateDnsName']
-                return host_names
+    
+    tags = response['Reservations'][0]['Instances'][0]['Tags']
+    for tag in tags:
+        if tag['Key'] == "eks:cluster-name":
+            return tag['Value']
+    
+    return ''
+  
 
 @app.route("/flask-service")
 def blue_or_green():
     """
     This function returns if the service is running on blue or green cluster env.
     """
-    get_host_names(node_name)
-    return "This service is running on pod: "+pod_name+" on node: "+node_name
+    return "This service is running on pod: "+pod_name+" on node: "+node_name+" in the cluster: "+get_cluster_name(node_name)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 80))
