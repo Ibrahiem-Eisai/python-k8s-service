@@ -1,4 +1,4 @@
-name: Pylint
+name: Python Test
 
 on: [push]
 
@@ -22,3 +22,7 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
+    - name: Test Python Code
+      run: |
+        python app.py
+        curl http://localhost:8080
