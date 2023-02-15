@@ -33,7 +33,7 @@ jobs:
   #       exit 0
 
   docker-build-and-push:
-    # needs: py-test
+    needs: py-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
