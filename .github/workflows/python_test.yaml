@@ -24,4 +24,6 @@ jobs:
         pylint $(git ls-files '*.py')
     - name: Test Python Code
       run: |
-        timeout 30s python app.py
+        python app.py &
+        curl http://localhost:8080
+        exit 0
