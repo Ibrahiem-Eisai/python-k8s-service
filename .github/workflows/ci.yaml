@@ -6,7 +6,7 @@ on:
       - "main"
 
 jobs:
-  py-test:
+  pylint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,15 +25,22 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
+  
+  # pytest:
+  #   needs: pylint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
   #   - name: Test Python Code
   #     run: |
   #       python app.py &
   #       sleep 10
-  #       curl http://127.0.0.1:80
+  #       curl http://127.0.0.1:8080
   #       exit 0
 
   docker-build-and-push:
-    needs: py-test
+    needs: pylint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
