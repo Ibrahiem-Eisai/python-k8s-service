@@ -1,8 +1,10 @@
+"""
+Tester service for identifying env.
+"""
 import os
 from flask import Flask
 
 app = Flask(__name__)
-
 
 @app.route("/")
 def blue_or_green():
