@@ -6,7 +6,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/flask-service")
 def blue_or_green():
     """
     This function returns if the service is running on blue or green cluster env.
